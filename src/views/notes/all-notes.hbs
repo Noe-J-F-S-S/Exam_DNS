@@ -1,0 +1,34 @@
+<div class="row">
+    {{#each notes}}
+    <div class="col-md-3">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title d-flex justify-content-between align-items-center">
+                    {{name}} {{last_name}} <a href="/notes/edit/{{_id}}"><i class="fas fa-edit"></i></a>
+                </h4>
+                <p>
+                    Celular/Telefono: {{phone_number}}
+                </p>
+                <p>
+                    Ciudad: {{city}}
+                </p>
+                <p>
+                    Dirección: {{address}}
+                </p>
+                <form action="/notes/delete/{{_id}}?_method=DELETE" method="post">
+                    <input type="hidden" name="_method" value="DELETE">
+                    <button class="btn btn-danger btn-block btn-sm" type="submit">Delete</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    {{else}}
+    <div class="card mx-auto">
+        <div class="card-body">
+            <h1>Hola {{ user.name }}</h1>
+            <p class="lead">No hay notas aún.</p>
+            <a href="/notes/add" class="btn btn-success btn-block">Crear un Contacto nuevo</a>
+        </div>
+    </div>
+    {{/each}}
+</div>
