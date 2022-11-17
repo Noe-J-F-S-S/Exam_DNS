@@ -8,6 +8,8 @@ const NoteSchema = new Schema ({
     city: { type: String, required: false},
     address: { type: String, required: false},
     phone_number: { type: String, required: true},
+    imageLink: String,
+    image_id: String,
     date: { type: Date, default: Date.now},
     user: { type: String}
 });

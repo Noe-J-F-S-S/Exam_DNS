@@ -1,11 +1,13 @@
 const express = require('express');
-const path = require('path');
+
 const exphbs = require('express-handlebars');
 const methodOverride = require('method-override');
 const session = require('express-session');
 const flash = require('connect-flash');
 const passport = require('passport');
-
+const morgan = require('morgan');
+const multer = require('multer');
+const path = require('path');
 // Initializations
 const app = express();
 require('./database');
@@ -29,7 +31,34 @@ app.engine('.hbs', exphbs({
 app.set('view engine', '.hbs');
 
 //Middlewares
+app.use(morgan('dev'))
+app.use(express.json())
 app.use(express.urlencoded({extended: false}));
+
+const storage = multer.diskStorage({
+    destination: path.join(__dirname,'public/uploads'),
+    filename: (req, file, cb) =>  {
+        cb(null, new Date().getTime() + path.extname(file.originalname));
+    }
+});
+
+app.post('/creoUpload', function(req, res, next) {
+    upload(req, res, function (err) {
+      if (err) {
+        // An error occurred when uploading
+        console.log('Err: ', err);
+        return;
+      } else {
+         console.log('req.file: ', JSON.stringify(req.file));  
+         console.log('req.files: ', JSON.stringify(req.files));
+         return;
+      }
+    })
+  });
+
+
+
+
 //Revida los inputs ocultos de la página
 app.use(methodOverride('_method'));
 app.use(session({
@@ -50,7 +79,7 @@ app.use((req, res, next) => {
     next();
 });
 
-
+app.use(multer({storage: storage}).single('image'));
 //Routes
 app.use(require('./routes/index'))
 app.use(require('./routes/notes'))
